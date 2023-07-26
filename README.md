@@ -1,4 +1,4 @@
-# Intalação do OpenGL
+# Instalação do OpenGL
 
 É recomendável que o Python (versão >=3.7) esteja instalado e configurado na variável de ambiente PATH, para poder executar o Python via linha de comando.
 
