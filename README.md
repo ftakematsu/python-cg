@@ -1,9 +1,8 @@
 # Intalação do OpenGL
 
-É recomendável que o Python esteja instalado e configurado na variável de ambiente PATH, para poder executar o Python via linha de comando.
+É recomendável que o Python (versão >=3.7) esteja instalado e configurado na variável de ambiente PATH, para poder executar o Python via linha de comando.
 
-Instale o OpenGL via pip:
-```python -m pip install PyOpenGL PyOpenGL_accelerate```
+Para a execução do projeto, pode-se utilizar alguma IDE compatível com a linguagem, como VS Code (preferencialmente com a extensão Python instalada) ou PyCharm.
 
-Instale o PyGame via pip (para janela de visualização):
-```python -m pip install pygame```
+Instale o OpenGL e o PyGame via pip:
+```python -m pip install PyOpenGL PyOpenGL_accelerate pygame```
