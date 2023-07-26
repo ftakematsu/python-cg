@@ -6,6 +6,7 @@ from OpenGL.GLU import *
 
 def draw():
     glBegin(GL_LINE_LOOP)
+    #glBegin(GL_POLYGON)
     #glBegin(GL_LINES)
     #glBegin(GL_QUADS)
     glColor3f(0.0, 0.0, 1.0)  # Define a cor do quadrado (vermelho)

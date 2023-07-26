@@ -6,6 +6,7 @@ from OpenGL.GLU import *
 
 def draw_cube():
     glBegin(GL_QUADS)
+    #glBegin(GL_LINE_LOOP)
     # Front Face
     glColor3f(1.0, 0.0, 0.0)
     glVertex3f(-1.0, -1.0, 1.0)
