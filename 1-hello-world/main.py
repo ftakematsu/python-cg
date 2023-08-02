@@ -9,6 +9,7 @@ def draw():
     #glBegin(GL_POLYGON)
     #glBegin(GL_LINES)
     #glBegin(GL_QUADS)
+    #glBegin(GL_POINTS)
     glColor3f(0.0, 0.0, 1.0)  # Define a cor do quadrado (vermelho)
     glVertex2f(-0.5, -0.5)   # Define o canto inferior esquerdo
     glVertex2f(0.5, -0.5)    # Define o canto inferior direito
