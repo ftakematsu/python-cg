@@ -20,6 +20,7 @@ def main():
     pygame.init()
     display = (800, 600)
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
+    pygame.display.set_caption('Computação Gráfica')
 
     gluOrtho2D(-1, 1, -1, 1)  # Define a projeção ortogonal
 
