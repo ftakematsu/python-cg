@@ -18,11 +18,14 @@ def setWindow(left,right,bottom,top):
 def setViewport(left, right, bottom, top):
     glViewport(left, bottom, right-left, top-bottom)
 
-
-def readFile():
+'''
+Leitor do arquivo
+'''
+def readFile(fileName):
     pass
 
 def draw():
+    setWindow(0.0, 640.0, 0.0, 480.0)
     readFile("exemplo.dat")
 
 
