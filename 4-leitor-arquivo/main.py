@@ -49,30 +49,64 @@ def draw():
     setWindow(0.0, 640.0, 0.0, 480.0)
     glColor3f(0.0, 0.0, 0.0)
     #readFile(ROOT_DIR + "\\4-leitor-arquivo\\dino.dat")
-    drawDinoViewPort()
+    #drawDinoViewPort()
+    drawDinoViewPort2()
+
+def drawDinoViewPort2():
+    #setWindow(640, 0, 0.0, 480.0) # Espelhamento para direita
+    setWindow(0, 640, 480, 0) # Espelhamento de cima para baixo
+    setViewport(0, 640, 0, 480)
+    readFile(ROOT_DIR + "\\4-leitor-arquivo\\dino.dat")
 
 def drawDinoViewPort():
     setWindow(0.0, 640.0, 0.0, 480.0)
     glColor3f(0.0, 0.0, 0.0)
+
+    # Primeiro viewport (vermelho)
     setViewport(0, 300, 0, 300)
+    glColor3f(1.0, 0.0, 0.0)
     readFile(ROOT_DIR + "\\4-leitor-arquivo\\dino.dat")
+    
+    # Segundo viewport (verde)
     setViewport(310, 500, 0, 200)
+    glColor3f(0.0, 1.0, 0.0)
     readFile(ROOT_DIR + "\\4-leitor-arquivo\\dino.dat")
+    
+    # Terceiro viewport (azul)
     setViewport(510, 650, 0, 150)
+    glColor3f(0.0, 0.0, 1.0)
     readFile(ROOT_DIR + "\\4-leitor-arquivo\\dino.dat")
 
 def main():
     pygame.init()
-    display = (800, 800)
+    display = (640, 480)
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
     pygame.display.set_caption('Computação Gráfica')
     #readFile("C:\\Users\\senai\\Documents\\python-cg\\4-leitor-arquivo\\exemplo.dat")
     init()
-    while True:
+    while True: # Looping para capturar eventos
+        # Iteração sobre uma lista de eventos
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
+            if event.type == pygame.QUIT: # Evento ao tentar fechar a janela
+                print("Saindo...")
+                pygame.quit() # Fecha a janela
+                quit() # Encerra o processo
+            if event.type == pygame.MOUSEBUTTONDOWN: # Botão do mouse clicado
+                (posX, posY) = pygame.mouse.get_pos()
+                print("Voce clicou em: " + str((posX, posY)))
+            if event.type == pygame.KEYDOWN: # Uma tecla do teclado pressionada
+                if event.key == pygame.K_a: # Tecla a
+                    print("Voce teclou a")
+                elif event.key == pygame.K_b:
+                    print("Voce teclou b")
+                elif event.key == pygame.K_UP:
+                    print("Para cima")
+                elif event.key == pygame.K_DOWN:
+                    print("Para baixo")
+                elif event.key == pygame.K_LEFT:
+                    print("Para esquerda")
+                elif event.key == pygame.K_RIGHT:
+                    print("Para direita")
         glClear(GL_COLOR_BUFFER_BIT)
         draw()
         pygame.display.flip()
