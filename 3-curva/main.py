@@ -69,11 +69,13 @@ def plotSin():
     glFlush()
 
 def draw():
-    #drawPoints()
+    drawPoints()
     #plotParabola()
     setViewport(0, 500, 0, 500)
     plotSin()
     setViewport(0, 150, 0, 150)
+    plotSin()
+    setViewport(160, 310, 0, 150)
     plotSin()
     setViewport(400, 500, 400, 500)
     plotParabola()

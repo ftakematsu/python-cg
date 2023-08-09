@@ -4,6 +4,9 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import math
+import os
+
+ROOT_DIR = os.path.abspath(os.curdir)
 
 def init():
     glClearColor(1.0, 1.0, 1.0, 0.0)  # Define a cor de fundo 
@@ -41,11 +44,22 @@ def readFile(fileName):
     glFlush() # Sempre faz uma atualização da tela
 
 
+
 def draw():
     setWindow(0.0, 640.0, 0.0, 480.0)
     glColor3f(0.0, 0.0, 0.0)
-    readFile("C:\\Users\\senai\\Documents\\python-cg\\4-leitor-arquivo\\dino.dat")
+    #readFile(ROOT_DIR + "\\4-leitor-arquivo\\dino.dat")
+    drawDinoViewPort()
 
+def drawDinoViewPort():
+    setWindow(0.0, 640.0, 0.0, 480.0)
+    glColor3f(0.0, 0.0, 0.0)
+    setViewport(0, 300, 0, 300)
+    readFile(ROOT_DIR + "\\4-leitor-arquivo\\dino.dat")
+    setViewport(310, 500, 0, 200)
+    readFile(ROOT_DIR + "\\4-leitor-arquivo\\dino.dat")
+    setViewport(510, 650, 0, 150)
+    readFile(ROOT_DIR + "\\4-leitor-arquivo\\dino.dat")
 
 def main():
     pygame.init()
@@ -54,7 +68,6 @@ def main():
     pygame.display.set_caption('Computação Gráfica')
     #readFile("C:\\Users\\senai\\Documents\\python-cg\\4-leitor-arquivo\\exemplo.dat")
     init()
-    setWindow(-5.0, 5.0, -0.3, 1.0)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
