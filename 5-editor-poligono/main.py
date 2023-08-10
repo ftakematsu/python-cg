@@ -32,6 +32,8 @@ class Ponto:
     def __init__(self, x, y):
         self.x = x
         self.y = y
+    def __str__(self):
+        return "(" + str(self.x) + ", " + str(self.y) + ")"
 
 class Poligono:
     pontos = []
@@ -40,16 +42,24 @@ class Poligono:
     def add(self, ponto: Ponto):
         self.pontos.append(ponto)
     def draw(self):
-        pass
+        #glBegin(GL_LINE_LOOP)
+        glBegin(GL_LINE_STRIP)
+        for ponto in self.pontos:
+            #print("Ponto: " + str(ponto))
+            glVertex2d(ponto.x, ponto.y)
+        glEnd()
+        glFlush()
 
 class Tela:
     ponto = 1.0
     linha = 1.0
     fundo = RGB(1.0, 1.0, 1.0)
     cor = RGB(0.0, 0.0, 0.0)
+    poligonos = [] # Lista de objetos Poligono
+    polAtual = 0 # Índice do polígono atual
     def __init__(self, px, py, title):
-        self.pX = px
-        self.pY = py
+        self.pX = px # Largura da janela
+        self.pY = py # Altura da janela
         self.title = title
         pygame.init()
         display = (self.pX, self.pY)
@@ -60,8 +70,16 @@ class Tela:
         glLineWidth(self.linha)
         setWindow(0.0, self.pX, 0.0, self.pY)
         glColor3f(self.cor.red, self.cor.green, self.cor.blue)
+        self.poligonos.append(Poligono())
+
+    def addPonto(self, ponto: Ponto):
+        # Conversão da dimensão das coordenadas matriciais
+        # para a dimensão do plano Cartesiano
+        ponto.y = self.pY - ponto.y
+        self.poligonos[self.polAtual].add(ponto)
+
     def draw(self):
-        pass
+        self.poligonos[0].draw()
 
 def main():
     tela = Tela(500, 500, "Editor de polígonos")
@@ -74,7 +92,9 @@ def main():
                 quit() # Encerra o processo
             if event.type == pygame.MOUSEBUTTONDOWN: # Botão do mouse clicado
                 (posX, posY) = pygame.mouse.get_pos()
-                print("Voce clicou em: " + str((posX, posY)))
+                #print("Voce clicou em: " + str((posX, posY)))
+                # Adicionando a região do pixel x,y como coordenada
+                tela.addPonto(Ponto(posX, posY))
         glClear(GL_COLOR_BUFFER_BIT)
         tela.draw()
         pygame.display.flip()
