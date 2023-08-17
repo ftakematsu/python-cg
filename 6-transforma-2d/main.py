@@ -4,6 +4,7 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import math
+import random
 
 class Ponto2D:
     def __init__(self, x, y):
@@ -12,6 +13,9 @@ class Ponto2D:
 
 # Representa o objeto
 objeto = []
+novoR = 0
+novoG = 0
+novoB = 1
 
 def criarObjeto():
     objeto.append(Ponto2D(150, 150))
@@ -36,17 +40,19 @@ def translacao(dX, dY):
         p.x = p.x + dX
         p.y = p.y + dY
 
-def escala():
+def escala(eX, eY):
     cm = centroMassa() # Define o centro de massa
     translacao(-cm.x, -cm.y) # Translada o objeto para origem
     # Aplica a escala
     for p in objeto:
-        p.x = p.x*1.1
-        p.y = p.y*1.1
+        p.x = p.x*eX
+        p.y = p.y*eY
     # Translada de volta para o local original
     translacao(cm.x, cm.y)
 
 def rotacao(angulo):
+    cm = centroMassa()
+    translacao(-cm.x, -cm.y)
     # Convertendo graus para radianos
     rad = angulo*(math.pi/180)
     for p in objeto:
@@ -54,10 +60,11 @@ def rotacao(angulo):
         novoy = p.x*math.sin(rad) + p.y*math.cos(rad)
         p.x = novox
         p.y = novoy
+    translacao(cm.x, cm.y)
 
 def draw():
     glBegin(GL_LINE_LOOP)
-    glColor3f(0.0, 0.0, 1.0)  # Define a cor do quadrado (vermelho)
+    glColor3f(novoR, novoG, novoB)  # Define a cor do quadrado (vermelho)
     for p in objeto:
         glVertex2f(p.x, p.y)
     glEnd()
@@ -79,10 +86,32 @@ def main():
                 if event.key == pygame.K_t:
                     translacao(5, 5)
                 elif event.key == pygame.K_e:
-                    escala()
-                elif event.key == pygame.K_r:
+                    escala(1.1, 1.1)
+                elif event.key == pygame.K_r or event.key == pygame.K_o:
                     rotacao(10)
-
+                elif event.key == pygame.K_p:
+                    rotacao(-10)
+                elif event.key == pygame.K_q:
+                    escala(1.1, 1)
+                elif event.key == pygame.K_w:
+                    escala(1, 1.1)
+                elif event.key == pygame.K_f:
+                    escala(0.9, 1)
+                elif event.key == pygame.K_g:
+                    escala(1, 0.9)
+                elif event.key == pygame.K_UP:
+                    translacao(0, 5)
+                elif event.key == pygame.K_DOWN:
+                    translacao(0, -5)
+                elif event.key == pygame.K_LEFT:
+                    translacao(-5, 0)
+                elif event.key == pygame.K_RIGHT:
+                    translacao(5, 0)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                print("Click")
+                novoR = random.random()
+                novoG = random.random()
+                novoB = random.random()
 
         glClear(GL_COLOR_BUFFER_BIT)
         draw()
