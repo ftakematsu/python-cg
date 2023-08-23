@@ -32,6 +32,11 @@ class Ponto:
     def __init__(self, x, y):
         self.x = x
         self.y = y
+    def distancia(self, ponto):
+        q1 = (ponto.x - self.x)**2
+        q2 = (ponto.y - self.y)**2
+        return math.sqrt(q1+q2)
+
     def __str__(self):
         return "(" + str(self.x) + ", " + str(self.y) + ")"
 
@@ -40,6 +45,26 @@ class Poligono:
         self.pontos = []
     def add(self, ponto: Ponto):
         self.pontos.append(ponto)
+    # Método para modificar o ponto atual para outro lugar
+    def mover(self, ponto: Ponto):
+        pass
+    def remover(self, ponto: Ponto):
+        pontoMaisPerto = self.pontos[0]
+        menorDistancia = math.inf # Um número bem grande
+        # Percorrer cada ponto:
+        for p in self.pontos:
+            dist = p.distancia(ponto)
+            # print(f"Distancia: {dist}")
+            # Calcula e determina o ponto que é mais próximo do local de clique
+            if (dist<menorDistancia):
+                menorDistancia = dist
+                pontoMaisPerto = p
+        print(f"Ponto mais perto: {pontoMaisPerto}")
+        # Remove o ponto da lista
+        self.pontos.remove(pontoMaisPerto)
+
+
+
     def draw(self):
         #glBegin(GL_LINE_LOOP)
         glBegin(GL_LINE_STRIP)
@@ -91,6 +116,10 @@ class Tela:
         # para a dimensão do plano Cartesiano
         ponto.y = self.pY - ponto.y
         self.poligonos[self.polAtual].add(ponto)
+    
+    def removerPonto(self, ponto: Ponto):
+        ponto.y = self.pY - ponto.y
+        self.poligonos[self.polAtual].remover(ponto)
 
     def draw(self):
         # Criar uma repetição while para desenhar cada polígono da lista
@@ -112,6 +141,7 @@ class Tela:
 
 
 def main():
+    modo = Modo.DESENHO
     tela = Tela(900, 900, "Editor de polígonos")
     while True: # Looping para capturar eventos
         # Iteração sobre uma lista de eventos
@@ -124,7 +154,12 @@ def main():
                 (posX, posY) = pygame.mouse.get_pos()
                 #print("Voce clicou em: " + str((posX, posY)))
                 # Adicionando a região do pixel x,y como coordenada
-                tela.addPonto(Ponto(posX, posY))
+                if (modo==Modo.DESENHO):
+                    tela.addPonto(Ponto(posX, posY))
+                elif (modo==Modo.REMOVER):
+                    tela.removerPonto(Ponto(posX, posY))
+                elif (modo==Modo.EDITAR):
+                    pass
             # Eventos relacionados a teclado
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
@@ -137,6 +172,15 @@ def main():
                     tela.poligonoAnterior()
                     print("Anterior: " )
                     print(str(tela.polAtual))
+                elif event.key == pygame.K_DELETE:
+                    print("Ativando modo de remover")
+                    modo = Modo.REMOVER
+                elif event.key == pygame.K_SPACE:
+                    print("Ativando modo de inserir")
+                    modo = Modo.DESENHO
+                elif event.key == pygame.K_e:
+                    print("Ativando modo de editar")
+                    modo = Modo.EDITAR
 
         glClear(GL_COLOR_BUFFER_BIT)
         tela.draw()
