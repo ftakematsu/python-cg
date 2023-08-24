@@ -62,9 +62,20 @@ class Poligono:
         print(f"Ponto mais perto: {pontoMaisPerto}")
         # Remove o ponto da lista
         self.pontos.remove(pontoMaisPerto)
-
-
-
+    
+    def centroMassa(self):
+        cm = Ponto(0,0)
+        somax = 0
+        somay = 0
+        cont = 0
+        for p in self.pontos: 
+            somax += p.x
+            somay += p.y
+            cont+=1
+        cm.x = somax/cont
+        cm.y = somay/cont
+        return cm
+    
     def draw(self):
         #glBegin(GL_LINE_LOOP)
         glBegin(GL_LINE_STRIP)
@@ -76,6 +87,13 @@ class Poligono:
     def printData(self):
         for ponto in self.pontos:
             print(str(ponto))
+    def translacao(self, dX, dY):
+        # Não precisa deste, apenas para teste
+        cm = self.centroMassa()
+        print(cm)
+        for ponto in self.pontos:
+            ponto.x += dX
+            ponto.y += dY
 
 class Tela:
     ponto = 1.0
@@ -139,6 +157,8 @@ class Tela:
             self.poligonos[i].printData()
             i+=1
 
+    def translacao(self, dX, dY):
+        self.poligonos[self.polAtual].translacao(dX, dY)
 
 def main():
     modo = Modo.DESENHO
@@ -181,6 +201,8 @@ def main():
                 elif event.key == pygame.K_e:
                     print("Ativando modo de editar")
                     modo = Modo.EDITAR
+                elif event.key == pygame.K_w:
+                    tela.translacao(0, 5)
 
         glClear(GL_COLOR_BUFFER_BIT)
         tela.draw()
