@@ -9,6 +9,9 @@ def rotate_point(point, angle, center):
     new_y = cy + (x - cx) * math.sin(angle) + (y - cy) * math.cos(angle)
     return new_x, new_y
 
+def graus2rad(angle):
+    return angle*math.pi/180
+
 def rotatedPoints(sides, rotation_angle, raio):
     angle = 2 * math.pi / sides
     points = [];
@@ -40,7 +43,7 @@ def draw_filled_polygon(canvas, sides, radius,
                         center_x, center_y, 
                         line_color='black', fill_color='black', 
                         rotation_angle=0):
-    rotation_angle = rotation_angle*math.pi/180
+    rotation_angle = graus2rad(rotation_angle)
     angle = 2 * math.pi / sides
     points = []
     for i in range(sides):
@@ -51,23 +54,26 @@ def draw_filled_polygon(canvas, sides, radius,
     canvas.create_polygon(points, fill=fill_color, outline=line_color, width=5)
 
 
-def draw_arc(canvas, radius, 
-            center_x, center_y, 
-            line_color='black', fill_color='black', 
-            rotation_angle=0):
-    sides = 200
-    rotation_angle = rotation_angle*math.pi/180
-    angle = math.pi / sides
+def draw_arc(canvas, cx, cy, 
+            radius, startAngle, sweep,
+            line_color='black', fill_color='black', solid=True):
+    n = 200
+    #graus2rad(rotation_angle)
+    angle = startAngle * math.pi /180
+    angleInc = sweep * 2 * math.pi / (180 *n)
+    #rotation_angle = rotation_angle*math.pi/180
     points = []
-    somaAngulo = 0
     sides = 100
-    for i in range(sides):
-        x = center_x + radius * math.cos(i * angle)
-        y = center_y - radius * math.sin(i * angle)
-        somaAngulo+=angle
-
-    points = rotatedPoints(sides, rotation_angle, radius)
-    canvas.create_polygon(points, fill=fill_color, outline=line_color, width=5)
+    for i in range(sides+1):
+        x = cx + radius * math.cos(angle)
+        y = cy - radius * math.sin(angle)
+        angle += angleInc
+        points.append((x, y))
+    if (solid):
+        canvas.create_polygon(points, fill=fill_color, outline=line_color, width=5)
+    else:
+        for i in range(sides-1):
+            canvas.create_line(points[i][0], points[i][1], points[(i + 1) % sides][0], points[(i + 1) % sides][1])
 
 
 
@@ -89,12 +95,12 @@ line_color = 'blue'
 fill_color = 'red'
 
 # Chama a função para desenhar o polígono regular no canvas
-draw_regular_polygon(canvas, num_sides, raio2, center_x, center_y, 'blue', 0)
-draw_filled_polygon(canvas, num_sides, radius, center_x, center_y, line_color, 'green', 45)
-draw_filled_polygon(canvas, num_sides, radius*0.70, center_x, center_y, line_color, 'yellow', 0)
-draw_circle(canvas, radius/3, center_x, center_y, 'black')
-draw_filled_circle(canvas, radius/3, center_x, center_y, 'blue', 'blue')
-#draw_arc(canvas, radius/3, center_x, center_y, 'black', fill_color='')
+#draw_regular_polygon(canvas, num_sides, raio2, center_x, center_y, 'blue', 0)
+#draw_filled_polygon(canvas, num_sides, radius, center_x, center_y, line_color, 'green', 45)
+#draw_filled_polygon(canvas, num_sides, radius*0.70, center_x, center_y, line_color, 'yellow', 0)
+#draw_circle(canvas, radius/3, center_x, center_y, 'black')
+#draw_filled_circle(canvas, radius/3, center_x, center_y, 'blue', 'blue')
+draw_arc(canvas, center_x, center_y, 100, 0, 180, 'black', 'red', True)
 
 
 # Inicia o loop principal da aplicação
