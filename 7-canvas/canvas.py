@@ -9,7 +9,7 @@ class Canvas:
     
     def desenharLinha(
         self, xInicial, yInicial, xFinal, yFinal,
-        corLinha='black', comprimentoLinha=1
+        corLinha='black', espessuraLinha=1
     ):
         '''
         Desenha um segmento de reta considerando a ligação das coordenadas
@@ -17,7 +17,7 @@ class Canvas:
         '''
         self.canvas.create_line(
             xInicial, yInicial, xFinal, yFinal,
-            fill=corLinha, width=comprimentoLinha
+            fill=corLinha, width=espessuraLinha
         )
     
     def desenharRetangulo(self, xInicial, yInicial, xFinal, yFinal):
@@ -29,7 +29,7 @@ class Canvas:
     
     def desenharRetanguloSolido(
             self, xInicial, yInicial, xFinal, yFinal,
-            corFundo, corLinha, comprimentoLinha
+            corFundo, corLinha, espessuraLinha
     ):
         '''
         Desenha retângulo preenchido considerando a ligação das coordenadas
@@ -37,11 +37,13 @@ class Canvas:
         '''
         self.canvas.create_rectangle(
             xInicial, yInicial, xFinal, yFinal,
-            fill=corFundo, outline=corLinha, width=comprimentoLinha
+            fill=corFundo, outline=corLinha, width=espessuraLinha
         )
     
     def rotacionaPonto(self, point, angle, center):
-        # Função para rotacionar um ponto em torno de um centro
+        """
+        Função para rotacionar um ponto em torno de um centro (point)
+        """
         x, y = point
         cx, cy = center
         new_x = cx + (x - cx) * math.cos(angle) - (y - cy) * math.sin(angle)
@@ -49,11 +51,17 @@ class Canvas:
         return new_x, new_y
 
     def graus2rad(self, angle):
+        """
+        Converte um ângulo em graus para radianos
+        """
         return angle*math.pi/180
 
     def rotacionaPontos(self, sides, rotation_angle, raio, center_x, center_y):
+        """
+        Aplica a rotação para um conjunto de pontos
+        """
         angle = 2 * math.pi / sides
-        points = [];
+        points = []
         for i in range(sides):
             x = center_x + raio * math.cos(i * angle)
             y = center_y - raio * math.sin(i * angle)
@@ -61,44 +69,64 @@ class Canvas:
         rotated_points = [self.rotacionaPonto(point, rotation_angle, (center_x, center_y)) for point in points]
         return rotated_points
 
-    def desenhaPoligonoRegular(self, sides, radius, 
-                         center_x, center_y, line_color='black', 
-                         rotation_angle=0):
-        self.desenhaPoligonoRegularPreenchido(sides, radius, 
-                            center_x, center_y, 
-                            line_color, '', rotation_angle)
+    def desenhaPoligonoRegular(self, lados, raio, 
+                         centroX, centroY, corLinha='black', 
+                         anguloRotacao=0, espessuraLinha=1):
+        """
+        Desenha um polígono regular considerando o número de lados um centro, raio e ângulo. 
+        Possui parâmetros adicionais como cores (linha e fundo), espessura da linha e ângulo de rotação
+        """
+        self.desenhaPoligonoRegularPreenchido(lados, raio, 
+                            centroX, centroY, 
+                            corLinha, '', anguloRotacao, espessuraLinha)
 
     def desenhaCirculo(self, radius, 
-                    center_x, center_y, line_color='black'):
+                    centroX, centroY, corLinha='black', anguloRotacao=0, espessuraLinha=1):
+        """
+        Desenha um círculo (apenas circunferência, sem preenchimento) considerando o centro e raio. 
+        Possui parâmetros adicionais como cores (linha e fundo) e espessura da linha.
+        """
         self.desenhaPoligonoRegular(200, radius, 
-                    center_x, center_y, line_color)
+                    centroX, centroY, corLinha, anguloRotacao, espessuraLinha)
 
     def desenhaCirculoPreenchido(self, raio, 
-                    centroX, centroY, corLinha='black', corFundo='black', comprimentoLinha=1):
+                    centroX, centroY, corLinha='black', corFundo='black', espessuraLinha=1):
+        """
+        Desenha um círculo sólido considerando o centro e raio. 
+        Possui parâmetros adicionais como cores (linha e fundo) e espessura da linha.
+        """
         self.desenhaPoligonoRegularPreenchido(200, raio, 
-                    centroX, centroY, corLinha, corFundo, 0, comprimentoLinha)
+                    centroX, centroY, corLinha, corFundo, 0, espessuraLinha)
 
-    def desenhaPoligonoRegularPreenchido(self, sides, raio, 
+    def desenhaPoligonoRegularPreenchido(self, lados, raio, 
                             centroX, centroY, 
                             corLinha='black', corFundo='black', 
-                            anguloRotacao=0, comprimentoLinha=1):
+                            anguloRotacao=0, espessuraLinha=1):
+        """
+        Desenha um polígono regular sólido considerando o número de lados um centro, raio e ângulo. 
+        Possui parâmetros adicionais como cores (linha e fundo), espessura da linha e ângulo de rotação.
+        """
         rotation_angle = self.graus2rad(anguloRotacao)
-        angle = 2 * math.pi / sides
+        angle = 2 * math.pi / lados
         points = []
-        for i in range(sides):
+        for i in range(lados):
             x = centroX + raio * math.cos(i * angle)
             y = centroY - raio * math.sin(i * angle)
             points.append((x, y))
-        points = self.rotacionaPontos(sides, rotation_angle, raio, centroX, centroY)
-        self.canvas.create_polygon(points, fill=corFundo, outline=corLinha, width=comprimentoLinha)
+        points = self.rotacionaPontos(lados, rotation_angle, raio, centroX, centroY)
+        self.canvas.create_polygon(points, fill=corFundo, outline=corLinha, width=espessuraLinha)
 
     def desenhaArco(self, centroX, centroY, 
                 raio, anguloInicial, anguloArco,
                 corLinha='black', 
                 corFundo='black', 
                 solido=True,
-                comprimentoLinha=1
+                espessuraLinha=1
     ):
+        """
+        Desenha um arco considerando um centro, raio e ângulo. 
+        Possui parâmetros adicionais como cores (linha e fundo), espessura da linha e se é uma figura sólida ou não.
+        """
         n = 200
         #graus2rad(rotation_angle)
         angle = anguloInicial * math.pi /180
@@ -112,8 +140,8 @@ class Canvas:
             angle += angleInc
             points.append((x, y))
         if (solido):
-            self.canvas.create_polygon(points, fill=corFundo, outline=corLinha, width=comprimentoLinha)
+            self.canvas.create_polygon(points, fill=corFundo, outline=corLinha, width=espessuraLinha)
         else:
             for i in range(sides-1):
-                self.canvas.create_line(points[i][0], points[i][1], points[(i + 1) % sides][0], points[(i + 1) % sides][1], fill=corLinha, width=comprimentoLinha)
+                self.canvas.create_line(points[i][0], points[i][1], points[(i + 1) % sides][0], points[(i + 1) % sides][1], fill=corLinha, width=espessuraLinha)
 
