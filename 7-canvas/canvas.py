@@ -116,6 +116,51 @@ class Canvas:
         points = self.rotacionaPontos(lados, rotation_angle, raio, centroX, centroY)
         self.canvas.create_polygon(points, fill=corFundo, outline=corLinha, width=espessuraLinha)
 
+    def desenhaCirculosBaseadoNoHexagono(self, raio, 
+                            centroX, centroY, 
+                            corLinha='black', 
+                            anguloRotacao=0, espessuraLinha=1):
+        """
+        Desenha um polígono regular sólido considerando o número de lados um centro, raio e ângulo. 
+        Possui parâmetros adicionais como cores (linha e fundo), espessura da linha e ângulo de rotação.
+        """
+        lados = 6
+        rotation_angle = self.graus2rad(anguloRotacao)
+        angle = 2 * math.pi / lados
+        points = []
+        for i in range(lados):
+            x = centroX + raio * math.cos(i * angle)
+            y = centroY - raio * math.sin(i * angle)
+            points.append((x, y))
+        points = self.rotacionaPontos(lados, rotation_angle, raio, centroX, centroY)
+        # Os pontos serão os centros da circunferência
+        for ponto in points:
+            self.desenhaCirculo(raio/2, ponto[0], ponto[1])
+        #self.canvas.create_polygon(points, fill='', outline=corLinha, width=espessuraLinha)
+
+    def desenhaQuadradoTextura(self, raio, 
+                            centroX, centroY, 
+                            corLinha='black', 
+                            anguloRotacao=90, espessuraLinha=1):
+        """
+        Desenha um polígono regular sólido considerando o número de lados um centro, raio e ângulo. 
+        Possui parâmetros adicionais como cores (linha e fundo), espessura da linha e ângulo de rotação.
+        """
+        lados = 4
+        rotation_angle = self.graus2rad(anguloRotacao)
+        angle = 2 * math.pi / lados
+        points = []
+        for i in range(lados):
+            x = centroX + raio * math.cos(i * angle)
+            y = centroY - raio * math.sin(i * angle)
+            points.append((x, y))
+        points = self.rotacionaPontos(lados, rotation_angle, raio, centroX, centroY)
+        # Os pontos serão os centros da circunferência
+        for ponto in points:
+            self.desenhaCirculo(raio, ponto[0], ponto[1], espessuraLinha=espessuraLinha)
+        self.canvas.create_polygon(points, fill='', outline=corLinha, width=espessuraLinha)
+
+
     def desenhaArco(self, centroX, centroY, 
                 raio, anguloInicial, anguloArco,
                 corLinha='black', 
