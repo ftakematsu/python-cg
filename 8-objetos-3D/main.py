@@ -22,6 +22,10 @@ class Vector3:
         self.x = x
         self.y = y 
         self.z = z
+    def set(self, x, y, z) -> None:
+        self.x = x
+        self.y = y 
+        self.z = z
 
 def init():
     glClearColor(1.0, 1.0, 1.0, 0.0)  # Define a cor de fundo 
@@ -67,7 +71,7 @@ class Mesh:
         self.face = [Face()]*50000 # Faces - objetos Face
         self.norm = [Vector3(0,0,0)]*50000 # Normal - Vetor de normais
     def addVertice(self, x, y, z):
-        self.pt.append(Point3(x, y, z))
+        self.pt[self.numVerts] = Point3(x, y, z)
         self.numVerts += 1
     def addFace(self, fac, qtd):
         for f in range(qtd):
@@ -90,19 +94,44 @@ class Mesh:
         vert_face = [Point3(0,0,0)]*100
         print(self.numFaces)
         for f in range(self.numFaces):
+            # Vertice de cada face
             for v in range(3):
                 vert_face[v] = self.getVertFace(f, v)
+            # v2-v1
+            for v in range(2):
+                a[v][0] = vert_face[v+1].x - vert_face[v].x
+                a[v][1] = vert_face[v+1].y - vert_face[v].y
+                a[v][2] = vert_face[v+1].z - vert_face[v].z    
+            # Matriz para calcular a determinante
+            xn = a[0][1]*a[1][2] - a[0][2]*a[1][1]
+            yn = a[0][2]*a[1][0] - a[0][0]*a[1][2]
+            zn = a[0][0]*a[1][1] - a[0][1]*a[1][0]
+            self.norm[self.numNormals].set(xn, yn, zn)
+            self.numNormals += 1
+        for f in range(self.numNormals):
+            for v in range(self.face[f].nVerts):
+                self.face[f].vert[v].normIndex = f
     def draw(self):
-        pass
+        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        for f in range(self.numFaces):
+            glBegin(GL_POLYGON)
+            for v in range(self.face[f].nVerts):
+                indexNormal = self.face[f].vert[v].normIndex
+                indexVertice = self.face[f].vert[v].vertIndex-1
+                glNormal3f (self.norm[indexNormal].x, self.norm[indexNormal].y, self.norm[indexNormal].z)
+                glVertex3f (self.pt[indexVertice].x, self.pt[indexVertice].y, self.pt[indexVertice].z)
+                # print((self.pt[indexVertice].x, self.pt[indexVertice].y, self.pt[indexVertice].z))
+            glEnd()
+            glFlush()
 
-vertices = [
+globalVertices = [
     [1, 1, 1],
     [2, 5, 10],
     [10, 3, -1],
     [2, 10, -1]
 ]
 
-faces = [
+globalFaces = [
     [1, 2, 3],
     [1, 2, 4],
     [1, 3, 4],
@@ -112,9 +141,12 @@ faces = [
 mesh = Mesh()
 
 def initMeshObject():
-    for vertex in vertices:
+    for vertex in globalVertices:
         mesh.addVertice(vertex[0], vertex[1], vertex[2])
-    for face in faces:
+        print(mesh.nVerts)
+        for i in range(mesh.nVerts):
+            print(mesh.pt[i])
+    for face in globalFaces:
         mesh.addFace(face, len(face))
     mesh.calculaNormal()
 
@@ -128,7 +160,7 @@ def drawObject3D():
     glVertex3f(500, 150, -50)
     glVertex3f(100, 500, -50)
     """
-    for vertex in vertices:
+    for vertex in globalVertices:
         glVertex3f(vertex[0], vertex[1], vertex[2])
     glEnd()
 
@@ -155,7 +187,7 @@ def main():
 
         glRotatef(1, 3, 1, 1)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        draw()
+        mesh.draw()
         pygame.display.flip()
         pygame.time.wait(10)
 
