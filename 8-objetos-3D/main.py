@@ -16,12 +16,20 @@ class Point3:
         self.x = x
         self.y = y 
         self.z = z
+    def __str__(self) -> str:
+        return f"({self.x}, {self.y}, {self.z})"
 
 class Vector3:
     def __init__(self, x, y, z) -> None:
         self.x = x
         self.y = y 
         self.z = z
+    def set(self, x, y, z) -> None:
+        self.x = x
+        self.y = y 
+        self.z = z
+    def __str__(self) -> str:
+        return f"<{self.x}, {self.y}, {self.z}>"
 
 def init():
     glClearColor(1.0, 1.0, 1.0, 0.0)  # Define a cor de fundo 
@@ -88,10 +96,23 @@ class Mesh:
             [0,0,0]
         ]
         vert_face = [Point3(0,0,0)]*100
-        print(self.numFaces)
+        # print(self.numFaces)
         for f in range(self.numFaces):
             for v in range(3):
                 vert_face[v] = self.getVertFace(f, v)
+                print(vert_face[v])
+        # Calcula V2-V1
+        for v in range(2):
+            a[v][0] = vert_face[v+1].x - vert_face[v].x
+            a[v][1] = vert_face[v+1].y - vert_face[v].y
+            a[v][2] = vert_face[v+1].z - vert_face[v].z
+        # Calculando a normal através da determinante da matriz
+        xn = a[0][1]*a[1][2] - a[0][2]*a[1][1]
+        yn = a[0][2]*a[1][0] - a[0][0]*a[1][2]
+        zn = a[0][0]*a[1][1] - a[0][1]*a[1][0]
+        self.norm[self.numNormals].set(xn, yn, zn)
+        self.numNormals+=1
+        
     def draw(self):
         pass
 
@@ -133,8 +154,8 @@ def drawObject3D():
     glEnd()
 
 def draw():
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition)
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightIntensity)
+    #glLightfv(GL_LIGHT0, GL_POSITION, lightPosition)
+    #glLightfv(GL_LIGHT0, GL_DIFFUSE, lightIntensity)
     drawObject3D()
 
 def main():
@@ -142,7 +163,7 @@ def main():
     display = (800, 800)
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
 
-    #gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
+    #gluPerspective(45, display[0]/display[1], 1.1, 1.0)
 
     glTranslatef(0.0, 0.0, -5)
     init()
