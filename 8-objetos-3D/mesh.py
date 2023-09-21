@@ -51,10 +51,10 @@ class Mesh:
         self.numVerts += 1
     
     def addFace(self, fac, qtd):
-        print(f"FACE {self.numFaces}")
+        # print(f"FACE {self.numFaces}")
         self.face[self.numFaces] = Face()
         for f in range(qtd):
-            print(f"Adicionando em {f}: {fac[f]}")
+            # print(f"Adicionando em {f}: {fac[f]}")
             self.face[self.numFaces].vert[f] = VertexID(0, 0)
             self.face[self.numFaces].vert[f].vertIndex = fac[f]
         self.face[self.numFaces].nVerts = qtd
@@ -75,21 +75,17 @@ class Mesh:
             [0,0,0]
         ]
         vert_face = [Point3(0,0,0)]*100
-        print(f"Calculando normal para {self.numFaces} faces")
+        # print(f"Calculando normal para {self.numFaces} faces")
         for f in range(self.numFaces):
             for v in range(3):
                 vert_face[v] = Point3()
                 vert_face[v] = self.getVertFace(f, v)
-                print(f"VertFace {v}: {vert_face[v]}")
+                # print(f"VertFace {v}: {vert_face[v]}")
             # Calcula V2-V1
             for v in range(2):
                 a[v][0] = vert_face[v+1].x - vert_face[v].x
                 a[v][1] = vert_face[v+1].y - vert_face[v].y
                 a[v][2] = vert_face[v+1].z - vert_face[v].z
-            for i in range(2):
-                for j in range(3):
-                    print(f"{a[i][j]} ")   
-                print("\n")         
             # Calculando a normal através da determinante da matriz
             xn = a[0][1]*a[1][2] - a[0][2]*a[1][1]
             yn = a[0][2]*a[1][0] - a[0][0]*a[1][2]
@@ -109,14 +105,14 @@ class Mesh:
         
     def draw(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        print(f"QTD FACES: {self.numFaces}")
+        #print(f"QTD FACES: {self.numFaces}")
         for f in range(self.numFaces):
             glBegin(GL_POLYGON)
-            print(f"\n* FACE {f}")
+            #print(f"\n* FACE {f}")
             for v in range(self.face[f].nVerts):
                 normalIndex = self.face[f].vert[v].normIndex
                 vertexIndex = self.face[f].vert[v].vertIndex-1
-                #glNormal3f(self.norm[normalIndex].x, self.norm[normalIndex].y, self.norm[normalIndex].z )
+                glNormal3f(self.norm[normalIndex].x, self.norm[normalIndex].y, self.norm[normalIndex].z )
                 glVertex3f(self.pt[vertexIndex].x, self.pt[vertexIndex].y, self.pt[vertexIndex].z )
             glEnd()
             glFlush()
