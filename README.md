@@ -10,3 +10,7 @@ Instale o OpenGL e o PyGame via pip:
 Ou 
 
 ```C:/Users/aluno/AppData/Local/Programs/Python/Python37-32/python.exe -m pip install PyOpenGL PyOpenGL_accelerate pygame introcs```
+
+## Visualização dos objetos 3D (.obj)
+- Utilizar a extensão: vscode-3d-preview
+- Link: https://marketplace.visualstudio.com/items?itemName=tatsy.vscode-3d-preview

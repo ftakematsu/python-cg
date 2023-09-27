@@ -4,6 +4,13 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from mesh import *
+import os
+
+# Representa o diretório do projeto
+ROOT_DIR = os.path.abspath(os.curdir)
+
+# Arquivo .obj
+globalObjFile = "tetraedro.obj"
 
 DIM = 800.00
 screenHeight = 500
@@ -25,6 +32,18 @@ def init():
 
 vertices = []
 faces = []
+
+def definirObjetoSimples():
+    vertices = [
+        [0, 0, 0],
+        [10, 0, 0],
+        [10, 10, 10],
+        [0, 10, 10]
+    ]
+    faces = [
+        [1, 2, 3, 4]
+    ]
+    return (vertices, faces)
 
 def definirTetraetro():
     vertices = [
@@ -62,12 +81,21 @@ def definirCubo():
     ]
     return (vertices, faces)
 
+def readObjFile(file):
+    filePathName = ROOT_DIR + "\\8-objetos-3D\\objects\\" + file
+    print("Lendo o arquivo: " + filePathName)
+    # Leitura do arquivo
+    with open(filePathName) as f:
+        for line in f:
+            print(line)
 
 mesh = Mesh()
 
-def initMeshObject():
-    (vertices, faces) = definirCubo()
+def initMeshObject(objFile):
+    #(vertices, faces) = definirCubo()
     #(vertices, faces) = definirTetraetro()
+    (vertices, faces) = definirObjetoSimples()
+    readObjFile(objFile)
     for vertex in vertices:
         mesh.addVertice(vertex[0], vertex[1], vertex[2])
     for face in faces:
@@ -90,13 +118,14 @@ def draw():
     mesh.draw()
 
 def main():
+    global globalObjFile
     pygame.init()
     display = (800, 800)
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
     #gluPerspective(45, display[0]/display[1], 1.1, 1.0)
     glTranslatef(0.0, 0.0, -5)
     init()
-    initMeshObject()
+    initMeshObject(globalObjFile)
     glScalef(5, 5, 5)
     while True:
         for event in pygame.event.get():
