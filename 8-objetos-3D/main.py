@@ -10,7 +10,7 @@ import os
 ROOT_DIR = os.path.abspath(os.curdir)
 
 # Arquivo .obj
-globalObjFile = "tetraedro.obj"
+globalObjFile = "dinossauro.obj"
 
 DIM = 800.00
 screenHeight = 500
@@ -18,6 +18,28 @@ screenHeight = 500
 # Intensidades da luz
 lightIntensity = [0.7, 0.7, 0.7, 1.0]
 lightPosition = [2.0, 6.0, 3.0, 0.0]
+
+def defineTextura():
+    mat_ambient = [0.0,0.0,0.7,1.0]
+    mat_diffuse = [0.6,0.6,0.6,1.0]
+    mat_specular = [1.0,1.0,1.0,1.0]
+    mat_shininess = [50.0]
+    glMaterialfv(GL_FRONT,GL_AMBIENT,mat_ambient)
+    glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse)
+    glMaterialfv(GL_FRONT,GL_SPECULAR,mat_specular)
+    glMaterialfv(GL_FRONT,GL_SHININESS,mat_shininess)
+
+def defineTexturaOuro():
+    mat_ambient = [0.24725, 0.1995, 0.0745, 1.0]
+    mat_diffuse = [0.75164, 0.60648, 0.22648, 1.0]
+    mat_specular = [0.628281, 0.555802, 0.366065, 1.0]
+    mat_shininess = [51.2]
+    glMaterialfv(GL_FRONT,GL_AMBIENT,mat_ambient)
+    glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse)
+    glMaterialfv(GL_FRONT,GL_SPECULAR,mat_specular)
+    glMaterialfv(GL_FRONT,GL_SHININESS,mat_shininess)
+
+
 
 def init():
     glClearColor(1.0, 1.0, 1.0, 0.0)  # Define a cor de fundo 
@@ -131,6 +153,8 @@ def drawObject3D():
     glEnd()
 
 def draw():
+    #defineTextura()
+    defineTexturaOuro()
     glLightfv(GL_LIGHT0, GL_POSITION, lightPosition)
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lightIntensity)
     mesh.draw()
@@ -144,7 +168,7 @@ def main():
     glTranslatef(0.0, 0.0, -5)
     init()
     initMeshObject(globalObjFile)
-    glScalef(5, 5, 5)
+    glScalef(6, 6, 6)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
