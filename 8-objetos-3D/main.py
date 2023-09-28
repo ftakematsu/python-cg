@@ -82,20 +82,38 @@ def definirCubo():
     return (vertices, faces)
 
 def readObjFile(file):
+    vertices = []
+    faces = []
     filePathName = ROOT_DIR + "\\8-objetos-3D\\objects\\" + file
     print("Lendo o arquivo: " + filePathName)
     # Leitura do arquivo
     with open(filePathName) as f:
         for line in f:
-            print(line)
+            # Remove os espaços desnecessários da string
+            linhasSplit = line.split()
+            if (linhasSplit[0]=='v'):
+                linhasSplit.pop(0) # Remover o primeiro item
+                #print("Adicionando vertice")
+                vet = list(map(lambda x:float(x), linhasSplit))
+                #print(vet)
+                vertices.append(vet)
+            elif (linhasSplit[0]=='f'):
+                linhasSplit.pop(0) # Remove o primeiro item
+                #print("Adicionando face")
+                vet = list(map(lambda x:int(x), linhasSplit))
+                #print(vet)
+                faces.append(vet)
+            # v.pop(0)
+            # list(map(lambda x:int(x), v))
+    return (vertices, faces)
 
 mesh = Mesh()
 
 def initMeshObject(objFile):
     #(vertices, faces) = definirCubo()
     #(vertices, faces) = definirTetraetro()
-    (vertices, faces) = definirObjetoSimples()
-    readObjFile(objFile)
+    #(vertices, faces) = definirObjetoSimples()
+    (vertices, faces) = readObjFile(objFile)
     for vertex in vertices:
         mesh.addVertice(vertex[0], vertex[1], vertex[2])
     for face in faces:
@@ -103,7 +121,7 @@ def initMeshObject(objFile):
     mesh.calculaNormal()
     #mesh.printVertices()
     #mesh.printFaces()
-    mesh.printNormals()
+    #mesh.printNormals()
 
 def drawObject3D():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
