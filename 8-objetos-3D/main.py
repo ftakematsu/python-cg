@@ -4,47 +4,29 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from mesh import *
-from camera import *
+from config import *
 import os
 
 # Representa o diretório do projeto
 ROOT_DIR = os.path.abspath(os.curdir)
 
 # Arquivo .obj
-globalObjFile = "tetraedro.obj"
+globalObjFile = "caveira.obj"
 
 # Objeto Mesh
 mesh = Mesh()
 
+# Textura
+texture = Texture()
+
+# Luz
+light = Light()
+
 # Camera
-camera = Camera()
+view = View()
 
 DIM = 500.00
 screenHeight = 400
-
-# Intensidades da luz
-lightIntensity = [0.7, 0.7, 0.7, 1.0]
-lightPosition = [2.0, 6.0, 3.0, 0.0]
-
-def defineTextura():
-    mat_ambient = [0.0,0.0,0.7,1.0]
-    mat_diffuse = [0.6,0.6,0.6,1.0]
-    mat_specular = [1.0,1.0,1.0,1.0]
-    mat_shininess = [50.0]
-    glMaterialfv(GL_FRONT,GL_AMBIENT,mat_ambient)
-    glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse)
-    glMaterialfv(GL_FRONT,GL_SPECULAR,mat_specular)
-    glMaterialfv(GL_FRONT,GL_SHININESS,mat_shininess)
-
-def defineTexturaOuro():
-    mat_ambient = [0.24725, 0.1995, 0.0745, 1.0]
-    mat_diffuse = [0.75164, 0.60648, 0.22648, 1.0]
-    mat_specular = [0.628281, 0.555802, 0.366065, 1.0]
-    mat_shininess = [51.2]
-    glMaterialfv(GL_FRONT,GL_AMBIENT,mat_ambient)
-    glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse)
-    glMaterialfv(GL_FRONT,GL_SPECULAR,mat_specular)
-    glMaterialfv(GL_FRONT,GL_SHININESS,mat_shininess)
 
 
 
@@ -161,17 +143,10 @@ def drawObject3D():
 
 def draw():
     #defineTextura()
-    eye = Point3(50,50,50)
-    lo = Point3(0,0,0)
-    up = Vector3(0,1,1)
-    # Configurações da câmera
-    camera.set(eye,lo,up)
-    camera.setShape(30, 1, 10, 100.0)
-    camera.slide(0,0,2)
     # Configurações de textura e iluminação
-    defineTexturaOuro()
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition)
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightIntensity)
+    texture.defineTexturaOuro()
+    light.projetaLuz()
+    view.projetaCamera()
     # Desenho do objeto
     mesh.draw()
 

@@ -46,7 +46,7 @@ class Camera:
         self.u = Vector3(up.cross(self.n).x, up.cross(self.n).y, up.cross(self.n).z) # make u = up X n
         self.n.normalize()
         self.u.normalize() # make them unit length
-        self.v = Vector3(self.n.cross(self.u).x, self.n.cross(self.u).y, self.n.cross(self.u).z);  # make v =  n X u
+        self.v = Vector3(self.n.cross(self.u).x, self.n.cross(self.u).y, self.n.cross(self.u).z)  # make v =  n X u
         self.setModelViewMatrix() # tell OpenGL 
     
     def slide(self, delU, delV, delN) -> None:
