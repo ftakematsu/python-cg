@@ -4,13 +4,20 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from mesh import *
+from camera import *
 import os
 
 # Representa o diretório do projeto
 ROOT_DIR = os.path.abspath(os.curdir)
 
 # Arquivo .obj
-globalObjFile = "dinossauro.obj"
+globalObjFile = "Caveira.obj"
+
+# Objeto Mesh
+mesh = Mesh()
+
+# Camera
+camera = Camera()
 
 DIM = 800.00
 screenHeight = 500
@@ -129,7 +136,7 @@ def readObjFile(file):
             # list(map(lambda x:int(x), v))
     return (vertices, faces)
 
-mesh = Mesh()
+
 
 def initMeshObject(objFile):
     #(vertices, faces) = definirCubo()
@@ -154,11 +161,23 @@ def drawObject3D():
 
 def draw():
     #defineTextura()
+    eye = Point3(40,40,40)
+    lo = Point3(0,0,0)
+    up = Vector3(0,1,1)
+    # Configurações da câmera
+    camera.set(eye,lo,up)
+    camera.setShape(60, 1, 10, 100.0)
+    camera.slide(0,0,2)
+    # Configurações de textura e iluminação
     defineTexturaOuro()
     glLightfv(GL_LIGHT0, GL_POSITION, lightPosition)
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lightIntensity)
+    # Desenho do objeto
     mesh.draw()
 
+'''
+Programa principal
+'''
 def main():
     global globalObjFile
     pygame.init()
@@ -174,7 +193,8 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-        glRotatef(1, 3, 1, 1)
+        #camera.slide(1,0,1)
+        #glRotatef(1, 3, 1, 1)
         #glTranslatef(0, 0, 0)
         draw()
         pygame.display.flip()
