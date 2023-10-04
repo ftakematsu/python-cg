@@ -16,28 +16,46 @@ class Texture:
         glMaterialfv(GL_FRONT,GL_SPECULAR, self.mat_specular)
         glMaterialfv(GL_FRONT,GL_SHININESS, self.mat_shininess)
 
-    def defineTexturaPadrao(self): 
+    def transformaTexturaPadrao(self): 
         self.mat_ambient = [0.0,0.0,0.7,1.0]
         self.mat_diffuse = [0.6,0.6,0.6,1.0]
         self.mat_specular = [1.0,1.0,1.0,1.0]
         self.mat_shininess = [50.0]
         self.set()
 
-    def defineTexturaOuro(self):
+    def transformaOuro(self):
         self.mat_ambient = [0.24725, 0.1995, 0.0745, 1.0]
         self.mat_diffuse = [0.75164, 0.60648, 0.22648, 1.0]
         self.mat_specular = [0.628281, 0.555802, 0.366065, 1.0]
         self.mat_shininess = [51.2]
         self.set()
 
+    def transformaPrata(self):
+        self.mat_ambient = [0.19225, 0.19225, 0.19225, 1.0]
+        self.mat_diffuse = [0.50754, 0.50754, 0.50754, 1.0]
+        self.mat_specular = [0.508273, 0.508273, 0.508273, 1.0]
+        self.mat_shininess = [51.2]
+        self.set()
+
 
 class Light:
     def __init__(self) -> None:
+        self.intensity = 0.5
+        self.posX = 2.0
         # Intensidades da luz
-        self.lightIntensity = [0.7, 0.7, 0.7, 1.0]
-        self.lightPosition = [2.0, 6.0, 3.0, 0.0]
+
+    def aumenta(self):
+        self.intensity += 0.1
     
+    def diminui(self):
+        self.intensity -= 0.1
+    
+    def posicaoX(self, valor):
+        self.posX += valor
+
     def projetaLuz(self):
+        self.lightIntensity = [self.intensity, self.intensity, self.intensity, 1.0]
+        self.lightPosition = [self.posX, 6.0, 3.0, 0.0]
         glLightfv(GL_LIGHT0, GL_POSITION, self.lightPosition)
         glLightfv(GL_LIGHT0, GL_DIFFUSE, self.lightIntensity)
 
@@ -45,13 +63,18 @@ class Light:
 class View:
     def __init__(self) -> None:
         self.camera: Camera = Camera()
-        self.eye = Point3(50, 50, 50)
+        # Distância do olho (camera) com relação ao objeto
+        # Quanto maior - mais distante, quanto menor - mais perto
+        self.eye = Point3(500, 500, 500) 
         self.lo = Point3(0, 0, 0)
-        self.up = Vector3(0, 1, 1)
+        self.up = Vector3(1, 0, 1)
+        
         # Configurações da câmera
     def projetaCamera(self):
+        self.eye = Point3(self.eye.x, self.eye.y, self.eye.z+1)
+        #self.lo = Point3(self.lo.x, self.lo.y, self.lo.z)
         self.camera.set(self.eye, self.lo, self.up)
-        self.camera.setShape(30, 1, 10, 100.0)
-        #self.camera.slide(0, 0, 2)
+        self.camera.setShape(10, 1, 10, 2000.0)
+        #self.camera.yaw(2)
 
     

@@ -11,7 +11,7 @@ import os
 ROOT_DIR = os.path.abspath(os.curdir)
 
 # Arquivo .obj
-globalObjFile = "caveira.obj"
+globalObjFile = "Peixe.obj"
 
 # Objeto Mesh
 mesh = Mesh()
@@ -25,7 +25,7 @@ light = Light()
 # Camera
 view = View()
 
-DIM = 500.00
+DIM = 700.00
 screenHeight = 400
 
 
@@ -43,54 +43,6 @@ def init():
 
 vertices = []
 faces = []
-
-def definirObjetoSimples():
-    vertices = [
-        [0, 0, 0],
-        [10, 0, 0],
-        [10, 10, 10],
-        [0, 10, 10]
-    ]
-    faces = [
-        [1, 2, 3, 4]
-    ]
-    return (vertices, faces)
-
-def definirTetraetro():
-    vertices = [
-        [10, 10, 10],
-        [20, 50, 100],
-        [100, 30, -10],
-        [20, 100, -10]
-    ]
-    faces = [
-        [1, 2, 3],
-        [1, 2, 4],
-        [1, 3, 4],
-        [2, 4, 3]
-    ]
-    return (vertices, faces)
-
-def definirCubo():
-    vertices = [
-        [-40, -40, 40],
-        [40, -40, 40],
-        [40, 40, 40],
-        [-40, 40, 40],
-        [-40 ,-40, -40],
-        [40, -40, -40],
-        [40, 40, -40],
-        [-40 ,40 ,-40]
-    ]
-    faces = [
-        [1 ,2, 3, 4],
-        [6, 5, 8, 7],
-        [4, 3, 7, 8],
-        [2, 1, 5, 6],
-        [5, 1, 4, 8],
-        [2, 6, 7, 3]
-    ]
-    return (vertices, faces)
 
 def readObjFile(file):
     vertices = []
@@ -118,12 +70,7 @@ def readObjFile(file):
             # list(map(lambda x:int(x), v))
     return (vertices, faces)
 
-
-
 def initMeshObject(objFile):
-    #(vertices, faces) = definirCubo()
-    #(vertices, faces) = definirTetraetro()
-    #(vertices, faces) = definirObjetoSimples()
     (vertices, faces) = readObjFile(objFile)
     for vertex in vertices:
         mesh.addVertice(vertex[0], vertex[1], vertex[2])
@@ -144,7 +91,6 @@ def drawObject3D():
 def draw():
     #defineTextura()
     # Configurações de textura e iluminação
-    texture.defineTexturaOuro()
     light.projetaLuz()
     view.projetaCamera()
     # Desenho do objeto
@@ -162,17 +108,27 @@ def main():
     #glTranslatef(0.0, 0.0, -5)
     init()
     initMeshObject(globalObjFile)
-    glScalef(6, 6, 6)
+    #glScalef(6, 6, 6)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    print("LEFT")
-                if event.key == pygame.K_RIGHT:
-                    print("RIGHT")
+                if event.key == pygame.K_t:
+                    texture.transformaTexturaPadrao()
+                if event.key == pygame.K_o:
+                    texture.transformaOuro()
+                if event.key == pygame.K_p:
+                    texture.transformaPrata()
+                if event.key == pygame.K_KP_PLUS:
+                    light.aumenta()
+                if event.key == pygame.K_KP_MINUS:
+                    light.diminui()
+                if event.key == pygame.K_KP_MULTIPLY:
+                    light.posicaoX(1)
+                if event.key == pygame.K_KP_DIVIDE:
+                    light.posicaoX(-1)
         #camera.slide(1,0,1)
         #glRotatef(1, 3, 1, 1)
         #glTranslatef(0, 0, 0)

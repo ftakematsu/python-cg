@@ -32,10 +32,22 @@ class Camera:
         m = [0]*16
         # Converte o eye em vector
         eVec = Vector3(self.eye.x, self.eye.y, self.eye.z)
-        m[0] =  self.u.x; m[4] =  self.u.y; m[8]  =  self.u.z;  m[12] = -eVec.dot(self.u)
-        m[1] =  self.v.x; m[5] =  self.v.y; m[9]  =  self.v.z;  m[13] = -eVec.dot(self.v)
-        m[2] =  self.n.x; m[6] =  self.n.y; m[10] =  self.n.z;  m[14] = -eVec.dot(self.n)
-        m[3] =  0;   m[7] =  0;   m[11] =  0;    m[15] = 1.0
+        m[0] =  self.u.x
+        m[4] =  self.u.y
+        m[8]  =  self.u.z
+        m[12] = -eVec.dot(self.u)
+        m[1] =  self.v.x
+        m[5] =  self.v.y
+        m[9]  =  self.v.z
+        m[13] = -eVec.dot(self.v)
+        m[2] =  self.n.x
+        m[6] =  self.n.y
+        m[10] =  self.n.z
+        m[14] = -eVec.dot(self.n)
+        m[3] =  0
+        m[7] =  0
+        m[11] =  0
+        m[15] = 1.0
         glMatrixMode(GL_MODELVIEW)
         glLoadMatrixf(m)
 
