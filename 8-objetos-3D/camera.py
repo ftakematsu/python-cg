@@ -64,9 +64,21 @@ class Camera:
         self.setModelViewMatrix()
         
     def pitch(self, angle) -> None:
-        pass
+        cs = math.cos(math.pi/180.0 * angle)
+        sn = math.sin(math.pi/180.0 * angle)
+        t: Vector3  = self.u.copy()
+        self.v = Vector3(cs*t.x - sn*self.n.x, cs*t.y - sn*self.n.y, cs*t.z - sn*self.n.z)
+        self.n = Vector3(sn*t.x + cs*self.n.x, sn*t.y + cs*self.n.y, sn*t.z + cs*self.n.z)
+        self.setModelViewMatrix()
+    
     def yaw(self, angle) -> None:
-        pass
+        cs = math.cos(math.pi/180.0 * angle)
+        sn = math.sin(math.pi/180.0 * angle)
+        t: Vector3  = self.u.copy()
+        self.n = Vector3(cs*t.x - sn*self.u.x, cs*t.y - sn*self.u.y, cs*t.z - sn*self.u.z)
+        self.u = Vector3(sn*t.x + cs*self.u.x, sn*t.y + cs*self.u.y, sn*t.z + cs*self.u.z)
+        self.setModelViewMatrix()
+    
     def rotate(self, axis: Vector3, angle) -> None:
         pass
 

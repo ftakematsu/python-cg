@@ -11,7 +11,7 @@ import os
 ROOT_DIR = os.path.abspath(os.curdir)
 
 # Arquivo .obj
-globalObjFile = "Caveira.obj"
+globalObjFile = "tetraedro.obj"
 
 # Objeto Mesh
 mesh = Mesh()
@@ -19,8 +19,8 @@ mesh = Mesh()
 # Camera
 camera = Camera()
 
-DIM = 800.00
-screenHeight = 500
+DIM = 500.00
+screenHeight = 400
 
 # Intensidades da luz
 lightIntensity = [0.7, 0.7, 0.7, 1.0]
@@ -161,12 +161,12 @@ def drawObject3D():
 
 def draw():
     #defineTextura()
-    eye = Point3(40,40,40)
+    eye = Point3(50,50,50)
     lo = Point3(0,0,0)
     up = Vector3(0,1,1)
     # Configurações da câmera
     camera.set(eye,lo,up)
-    camera.setShape(60, 1, 10, 100.0)
+    camera.setShape(30, 1, 10, 100.0)
     camera.slide(0,0,2)
     # Configurações de textura e iluminação
     defineTexturaOuro()
@@ -181,10 +181,10 @@ Programa principal
 def main():
     global globalObjFile
     pygame.init()
-    display = (800, 800)
+    display = (DIM, DIM)
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
     #gluPerspective(45, display[0]/display[1], 1.1, 1.0)
-    glTranslatef(0.0, 0.0, -5)
+    #glTranslatef(0.0, 0.0, -5)
     init()
     initMeshObject(globalObjFile)
     glScalef(6, 6, 6)
@@ -193,6 +193,11 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    print("LEFT")
+                if event.key == pygame.K_RIGHT:
+                    print("RIGHT")
         #camera.slide(1,0,1)
         #glRotatef(1, 3, 1, 1)
         #glTranslatef(0, 0, 0)
