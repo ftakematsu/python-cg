@@ -70,7 +70,7 @@ class Camera:
     def roll(self, angle) -> None:
         cs = math.cos(math.pi/180.0 * angle)
         sn = math.sin(math.pi/180.0 * angle)
-        t: Vector3  = self.u.copy()
+        t: Vector3  = self.u
         self.u = Vector3(cs*t.x - sn*self.v.x, cs*t.y - sn*self.v.y, cs*t.z - sn*self.v.z)
         self.v = Vector3(sn*t.x + cs*self.v.x, sn*t.y + cs*self.v.y, sn*t.z + cs*self.v.z)
         self.setModelViewMatrix()
@@ -78,7 +78,7 @@ class Camera:
     def pitch(self, angle) -> None:
         cs = math.cos(math.pi/180.0 * angle)
         sn = math.sin(math.pi/180.0 * angle)
-        t: Vector3  = self.u.copy()
+        t: Vector3  = self.v
         self.v = Vector3(cs*t.x - sn*self.n.x, cs*t.y - sn*self.n.y, cs*t.z - sn*self.n.z)
         self.n = Vector3(sn*t.x + cs*self.n.x, sn*t.y + cs*self.n.y, sn*t.z + cs*self.n.z)
         self.setModelViewMatrix()
@@ -86,7 +86,7 @@ class Camera:
     def yaw(self, angle) -> None:
         cs = math.cos(math.pi/180.0 * angle)
         sn = math.sin(math.pi/180.0 * angle)
-        t: Vector3  = self.u.copy()
+        t: Vector3  = self.n
         self.n = Vector3(cs*t.x - sn*self.u.x, cs*t.y - sn*self.u.y, cs*t.z - sn*self.u.z)
         self.u = Vector3(sn*t.x + cs*self.u.x, sn*t.y + cs*self.u.y, sn*t.z + cs*self.u.z)
         self.setModelViewMatrix()

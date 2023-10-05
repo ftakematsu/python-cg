@@ -11,7 +11,7 @@ import os
 ROOT_DIR = os.path.abspath(os.curdir)
 
 # Arquivo .obj
-globalObjFile = "Peixe.obj"
+globalObjFile = "Caveira.obj"
 
 # Objeto Mesh
 mesh = Mesh()
@@ -63,7 +63,7 @@ def readObjFile(file):
             elif (linhasSplit[0]=='f'):
                 linhasSplit.pop(0) # Remove o primeiro item
                 #print("Adicionando face")
-                vet = list(map(lambda x:int(x), linhasSplit))
+                vet = list(map(lambda x:int(x.split("/")[0]), linhasSplit))
                 #print(vet)
                 faces.append(vet)
             # v.pop(0)
@@ -92,7 +92,7 @@ def draw():
     #defineTextura()
     # Configurações de textura e iluminação
     light.projetaLuz()
-    view.projetaCamera()
+    #
     # Desenho do objeto
     mesh.draw()
 
@@ -108,6 +108,7 @@ def main():
     #glTranslatef(0.0, 0.0, -5)
     init()
     initMeshObject(globalObjFile)
+    view.projetaCamera()
     #glScalef(6, 6, 6)
     while True:
         for event in pygame.event.get():
@@ -129,6 +130,8 @@ def main():
                     light.posicaoX(1)
                 if event.key == pygame.K_KP_DIVIDE:
                     light.posicaoX(-1)
+                if event.key == pygame.K_y:
+                    view.yaw()
         #camera.slide(1,0,1)
         #glRotatef(1, 3, 1, 1)
         #glTranslatef(0, 0, 0)

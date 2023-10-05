@@ -67,14 +67,27 @@ class View:
         # Quanto maior - mais distante, quanto menor - mais perto
         self.eye = Point3(500, 500, 500) 
         self.lo = Point3(0, 0, 0)
-        self.up = Vector3(1, 0, 1)
+        self.up = Vector3(0, 1, 1)
         
         # Configurações da câmera
     def projetaCamera(self):
-        self.eye = Point3(self.eye.x, self.eye.y, self.eye.z+1)
+        #self.eye = Point3(self.eye.x, self.eye.y, self.eye.z)
         #self.lo = Point3(self.lo.x, self.lo.y, self.lo.z)
         self.camera.set(self.eye, self.lo, self.up)
         self.camera.setShape(10, 1, 10, 2000.0)
-        #self.camera.yaw(2)
+    
+    def slide(self):
+        self.camera.slide(1, 1, 1)
+
+    def roll(self):
+        self.camera.roll(1)
+    
+    def pitch(self):
+        self.camera.pitch(1)
+
+    def yaw(self):
+        self.camera.yaw(1)
+
+        
 
     
